@@ -1,0 +1,91 @@
+class ToyStore:
+    def __init__(self):
+        self.toys = {
+            "Toy1": 499,
+            "Toy2": 112,
+            "Toy3": 10,
+            "Toy4": 999,
+            "Toy5": 49
+        }
+        self.cart = {}
+    
+    def display_toys(self):
+        print("\nAvailable Toys:")
+        for toy, price in self.toys.items():
+            print(f"{toy}: Rs. {price}")
+    
+    def add_to_cart(self, toy_name, quantity):
+        if toy_name in self.toys:
+            if toy_name in self.cart:
+                self.cart[toy_name] += quantity
+            else:
+                self.cart[toy_name] = quantity
+            print(f"{quantity} {toy_name}(s) added to cart.")
+        else:
+            print("Invalid toy name!")
+    
+    def view_cart(self):
+        if not self.cart:
+            print("\nYour cart is empty!")
+        else:
+            print("\nYour Cart:")
+            total = 0
+            for toy, quantity in self.cart.items():
+                price = self.toys[toy] * quantity
+                total += price
+                print(f"{toy} - {quantity} x Rs. {self.toys[toy]} = Rs. {price}")
+            print(f"Total Payable Amount: Rs. {total}")
+            final_choice = input("Type 'pay' to checkout or 'exit' to leave: ").strip().lower()
+            if final_choice == 'pay':
+                self.checkout()
+            elif final_choice == 'exit':
+                print("Warning: All items will be removed from the cart.")
+                print("Exiting the application. Have a great day!")
+    
+    def checkout(self):
+        if not self.cart:
+            print("Cart is empty. Nothing to pay!")
+        else:
+            print("Payment successful! Thank you for shopping.")
+            self.cart.clear()
+    
+    def run(self):
+        while True:
+            print("\nWELCOME TO THE TOY STORE")
+            print("\n------------------------")
+            print("\nOptions:\nEnter 'VIEW' to see products\nEnter 'CART' to view cart\nEnter 'EXIT' to quit shopping.")
+            choice = input("Enter your choice: ").strip().lower()
+            
+            if choice == 'view':
+                self.display_toys()
+                while True:
+                    item = input("Enter toy name to add to cart (or 'cart' to view cart, 'exit' to leave): ").strip()
+                    if item.lower() == 'cart':
+                        self.view_cart()
+                        break
+                    elif item.lower() == 'exit':
+                        break
+                    elif item in self.toys:
+                        try:
+                            quantity = int(input(f"Enter quantity for {item}: "))
+                            self.add_to_cart(item, quantity)
+                        except ValueError:
+                            print("Invalid quantity!")
+                    else:
+                        print("Sorry!Not available.")
+            
+            elif choice == 'cart':
+                self.view_cart()
+            
+            elif choice == 'exit':
+                if self.cart:
+                    print("Warning: All items will be removed from the cart.")
+                print("Exiting the application. Have a great day!")
+                break
+            
+            else:
+                print("Invalid option! Try again.")
+
+if __name__ == "__main__":
+    store = ToyStore()
+    store.run()
